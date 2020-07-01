@@ -33,6 +33,7 @@ Help us create configs for *all the LSPs!*
   ```
   :Plug 'neovim/nvim-lsp'
   ```
+Alternatively:
 - Call `:packadd nvim-lsp` in your vimrc if you installed nvim-lsp to
   `'packpath'` or if you use a package manager such as minpac.
 
@@ -45,9 +46,10 @@ diagnostics.
     vim.cmd('packadd nvim-lsp')  -- If installed as a Vim "package".
     require'nvim_lsp'.<config>.setup{name=…, settings = {…}, …}
 
+>:warning: **All examples are given in Lua,** see `help lua-heredoc` or `help lua-commands` to use Lua from your `init.vim`.
+
 Find the [config](#configurations) for your language, then paste the example
-given there to your `init.vim`. **All examples are given in Lua,** see `:help
-:lua-heredoc` to use Lua from your init.vim.
+given there to your `init.vim`.
 
 Some configs may define additional server-specific functions, e.g. the `texlab`
 config provides `nvim_lsp.texlab.buf_build({bufnr})`.
@@ -59,6 +61,42 @@ For the `gopls` config, that would be:
 
     vim.cmd('packadd nvim-lsp')  -- If installed as a Vim "package".
     require'nvim_lsp'.gopls.setup{}
+
+### Example: using lua-heredoc
+
+To setup nvim-lsp take the [config](#configurations), enclose it with `lua <<EOF` and `EOF`, paste it into `init.vim`.
+For the `gopls` and `yamlls` config, that would be:
+
+    lua << EOF
+    require'nvim_lsp'.gopls.setup{}
+    require'nvim_lsp'.yamlls.setup{}
+    EOF
+
+### Example: using lua-commands
+
+Alternatively you can take the [config](#configurations), prefix it with `:lua` and paste it into `init.vim`.
+For the `gopls` and `yamlls` config, that would be:
+
+    :lua require'nvim_lsp'.gopls.setup{}
+    :lua require'nvim_lsp'.yamlls.setup{}
+
+### Example: loading lsp configuration from file
+
+Overtime your lsp configuration will grow, so to keep it nice and organized you can 
+use dedicated file for it, like `~/.config/nvim/lua/lsp_config.lua`.
+For the `gopls` and `yamlls` config, that would be:
+
+- In `~/.config/nvim/lua/lsp_config.lua`
+    ```lua
+    local nvim_lsp = require('nvim_lsp')
+    nvim_lsp.gopls.setup{}
+    nvim_lsp.yamlls.setup{}
+
+    ```
+- In `~/.config/nvim/init.vim`
+    ```vim
+    :lua require('lsp_config')
+    ```
 
 ### Example: override some defaults
 
